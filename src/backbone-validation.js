@@ -201,15 +201,16 @@ Backbone.Validation = (function(_){
         // entire model is valid. Passing true will force a validation
         // of the model.
         isValid: function(option) {
-          var flattened = flatten(this.attributes);
+          var _this = this,
+              flattened = flatten(this.attributes);
 
           if(_.isString(option)){
             return !validateAttr(this, option, flattened[option], _.extend({}, this.attributes));
           }
           if(_.isArray(option)){
             return _.reduce(option, function(memo, attr) {
-              return memo && !validateAttr(this, attr, flattened[attr], _.extend({}, this.attributes));
-            }, true, this);
+              return memo && !validateAttr(_this, attr, flattened[attr], _.extend({}, _this.attributes));
+            }, true);
           }
           if(option === true) {
             this.validate();
@@ -597,7 +598,7 @@ Backbone.Validation = (function(_){
       // Validates that the value has to be equal to one of the elements in
       // the specified array. Case sensitive matching
       oneOf: function(value, attr, values, model) {
-        if(!_.include(values, value)){
+        if(!_.includes(values, value)){
           return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
         }
       },
